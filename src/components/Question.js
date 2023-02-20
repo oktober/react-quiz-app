@@ -10,9 +10,9 @@ function Question({ question }) {
 
     const answerInputs = Object.entries(filledAnswers).map( (value) => {
         return (
-            <div key={value[0]}>
-                <input type="radio" value={value[0]} name={value[0]} id={value[0]} />
-                <label htmlFor={value[0]}>{value[1]}</label>
+            <div key={value[0]} className="mt-2">
+                <input type="radio" value={value[0]} name="answer" id={value[0]} />
+                <label htmlFor={value[0]} className="ml-4">{value[1]}</label>
             </div>
         )
     });
@@ -21,7 +21,7 @@ function Question({ question }) {
         <article>
             <h2 className="font-semibold text-xl">Question #{question.id}</h2>
 
-            <legend className="text-l">{ question.question }</legend>
+            <legend className="text-l mt-2">{ question.question }</legend>
 
             { answerInputs }
         </article>

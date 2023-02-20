@@ -12,10 +12,10 @@ class App extends Component {
         let question = questions[0];
 
         return (
-            <>
-            <h1 className="font-bold text-2xl">Name of Quiz</h1>
-            { this.state.finished ? <Answer /> : <Question question={question} /> }
-            </>
+            <main className="grid h-full place-items-center mt-8 border-2">
+                <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
+                { this.state.finished ? <Answer /> : <Question question={question} /> }
+            </main>
         );
     };
 }
