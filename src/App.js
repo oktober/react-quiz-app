@@ -2,9 +2,11 @@ import { useState } from "react"
 import { questions } from "./questions"
 
 export default function App() {
+    const [ finishedQuiz, setFinishedQuiz ] = useState(false);
     const [ currentQuestion, setCurrentQuestion ] = useState(0);
     const [ answered, setAnswered ] = useState(false);
     const [ isCorrect, setIsCorrect ] = useState(false);
+    const [ numberCorrect, setNumberCorrect ] = useState(0);
     const [ selectedAnswer, setSelectedAnswer ] = useState('');
 
     const question = questions[currentQuestion];
@@ -41,6 +43,7 @@ export default function App() {
             // show a message based on whether it's right or wrong
             if (answeredCorrectly === 'true'){
                 setIsCorrect(true);
+                setNumberCorrect(numberCorrect => numberCorrect + 1);
             }else {
                 setIsCorrect(false);
             }
@@ -53,19 +56,22 @@ export default function App() {
     const clickNext = (event) => {
         event.preventDefault();
 
-        // move to the next question
-            // need to add logic for what to do when we're on the last question
-        setCurrentQuestion(currentQuestion => currentQuestion + 1);
-
         // set all the stylings, checked radio's, etc back to their defaults
         setIsCorrect(false);
         setAnswered(false);
         setSelectedAnswer('');
+
+        // move to the next question or show the results (if finished)
+        const nextQuestionId = currentQuestion + 1;
+        if (nextQuestionId >= questions.length) {
+            setFinishedQuiz(true);
+        } else {
+            setCurrentQuestion(currentQuestion => currentQuestion + 1);
+        }
     };
 
-    return (
-        <main className="grid h-full place-items-center mt-8 border-2">
-            <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
+    const Question = () => {
+        return (
             <article>
                 <h2 className="font-semibold text-xl">Question #{question.id}</h2>
 
@@ -88,6 +94,25 @@ export default function App() {
                 
                 </form>
             </article>
+        );
+    };
+
+    const Results = () => {
+        const percentage = Math.round((numberCorrect / questions.length) * 100);
+        return (
+            <section className="grid h-full place-items-center">
+                <h2 className="text-lg font-bold">{ percentage > 70 ? 'Congrats!' : 'Good effort!' }</h2>
+                <p className="mt-2 mb-6">You got {numberCorrect}/{questions.length} ({percentage}%) questions correct</p>
+            </section>
+        );
+    };
+
+    return (
+        <main className="grid h-full place-items-center mt-8 border-2">
+            <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
+
+            { finishedQuiz ? <Results /> : <Question /> }
+
         </main>
     );
 }
