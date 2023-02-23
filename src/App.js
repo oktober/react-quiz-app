@@ -9,9 +9,11 @@ export default function App() {
         <main className="grid h-full place-items-center mt-8 border-2">
             <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
 
-            { finishedQuiz 
+            { 
+            finishedQuiz 
                 ? <Results numberCorrect={numberCorrect} /> 
-                : <Question setNumberCorrect={setNumberCorrect} setFinishedQuiz={setFinishedQuiz} /> }
+                : <Question setNumberCorrect={setNumberCorrect} setFinishedQuiz={setFinishedQuiz} /> 
+            }
 
         </main>
     );
@@ -45,6 +47,7 @@ function Question({ setNumberCorrect, setFinishedQuiz }) {
         event.preventDefault();
 
         const chosenAnswer = event.target.answer.value;
+        
         if (chosenAnswer === '') {
             alert('Please select an answer');
         } else {
@@ -60,7 +63,7 @@ function Question({ setNumberCorrect, setFinishedQuiz }) {
                 setIsCorrect(false);
             }
 
-            // show the 'Next' button and disable the 'Submit' button (or replace it?)
+            // show the 'Next' button instead of the 'Submit' button
             setAnswered(true);
         }
     };
@@ -75,11 +78,10 @@ function Question({ setNumberCorrect, setFinishedQuiz }) {
 
         // move to the next question or show the results (if finished)
         const nextQuestionId = currentQuestionId + 1;
-        if (nextQuestionId >= questions.length) {
-            setFinishedQuiz(true);
-        } else {
-            setCurrentQuestionId(currentQuestionId => currentQuestionId + 1);
-        }
+        
+        nextQuestionId >= questions.length 
+            ? setFinishedQuiz(true) 
+            : setCurrentQuestionId(currentQuestionId => currentQuestionId + 1);
     };
 
     return (
@@ -91,14 +93,16 @@ function Question({ setNumberCorrect, setFinishedQuiz }) {
 
             { answerInputs }
 
-            { answered 
+            { 
+            answered 
                 ? isCorrect
                     ? <p className="mt-4 text-green-500">Correct!</p>
                     : <p className="mt-4"><span className="text-red-700">Incorrect</span> - {question.explanation}</p>
-                : '' }
+                : '' 
+            }
 
             {
-                answered 
+            answered 
                 ? <button onClick={clickNext} className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Next Question</button> 
                 : <button type="submit" name="submit" className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Submit</button>
             }
@@ -110,7 +114,7 @@ function Question({ setNumberCorrect, setFinishedQuiz }) {
 
 function Results({ numberCorrect }) {
     const percentage = Math.round((numberCorrect / questions.length) * 100);
-    
+
     return (
         <section className="grid h-full place-items-center">
             <h2 className="text-lg font-bold">{ percentage > 70 ? 'Congrats!' : 'Good effort!' }</h2>
