@@ -26,6 +26,7 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        event.stopPropagation();
         
         if (selectedAnswer === '') {
             alert('Please select an answer');
