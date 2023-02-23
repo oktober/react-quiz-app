@@ -16,8 +16,8 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
                     value={value[0]} 
                     name="answer" 
                     id={value[0]} 
-                    checked={selectedAnswer === value[1]} 
-                    onChange={() => setSelectedAnswer(value[1])}
+                    checked={selectedAnswer === value[0]} 
+                    onChange={() => setSelectedAnswer(value[0])}
                 />
                 <label htmlFor={value[0]} className="ml-4">{value[1]}</label>
             </div>
@@ -26,15 +26,13 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
 
     const onSubmit = (event) => {
         event.preventDefault();
-
-        const chosenAnswer = event.target.answer.value;
         
-        if (chosenAnswer === '') {
+        if (selectedAnswer === '') {
             alert('Please select an answer');
         } else {
             // check if it's the right answer
-            const chosenAnswerText = chosenAnswer + '_correct';
-            const answeredCorrectly = questions[currentQuestionId].correct_answers[chosenAnswerText];
+            const selectedAnswerText = selectedAnswer + '_correct';
+            const answeredCorrectly = questions[currentQuestionId].correct_answers[selectedAnswerText];
 
             // show a message based on whether it's right or wrong
             if (answeredCorrectly === 'true'){
