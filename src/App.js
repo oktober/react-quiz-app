@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { questions } from "./questions"
 import Question from "./components/Question";
 import Results from "./components/Results";
 
@@ -12,8 +13,8 @@ export default function App() {
 
             { 
             finishedQuiz 
-                ? <Results numberCorrect={numberCorrect} /> 
-                : <Question setNumberCorrect={setNumberCorrect} setFinishedQuiz={setFinishedQuiz} /> 
+                ? <Results numberCorrect={numberCorrect} numberOfQuestions={questions.length} /> 
+                : <Question questions={questions} setNumberCorrect={setNumberCorrect} setFinishedQuiz={setFinishedQuiz} /> 
             }
 
         </main>

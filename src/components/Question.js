@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { questions } from "./../questions"
 
-export default function Question({ setNumberCorrect, setFinishedQuiz }) {
+export default function Question({ questions, setNumberCorrect, setFinishedQuiz }) {
     const [ currentQuestionId, setCurrentQuestionId ] = useState(0);
     const [ selectedAnswer, setSelectedAnswer ] = useState('');
     const [ answered, setAnswered ] = useState(false);
