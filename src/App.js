@@ -3,13 +3,27 @@ import { questions } from "./questions"
 
 export default function App() {
     const [ finishedQuiz, setFinishedQuiz ] = useState(false);
-    const [ currentQuestion, setCurrentQuestion ] = useState(0);
+    const [ numberCorrect, setNumberCorrect ] = useState(0);
+
+    return (
+        <main className="grid h-full place-items-center mt-8 border-2">
+            <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
+
+            { finishedQuiz 
+                ? <Results numberCorrect={numberCorrect} /> 
+                : <Question setNumberCorrect={setNumberCorrect} setFinishedQuiz={setFinishedQuiz} /> }
+
+        </main>
+    );
+}
+
+function Question({ setNumberCorrect, setFinishedQuiz }) {
+    const [ currentQuestionId, setCurrentQuestionId ] = useState(0);
+    const [ selectedAnswer, setSelectedAnswer ] = useState('');
     const [ answered, setAnswered ] = useState(false);
     const [ isCorrect, setIsCorrect ] = useState(false);
-    const [ numberCorrect, setNumberCorrect ] = useState(0);
-    const [ selectedAnswer, setSelectedAnswer ] = useState('');
 
-    const question = questions[currentQuestion];
+    const question = questions[currentQuestionId];
 
     const answerInputs = Object.entries(question.answers).map( (value) => {
         return (
@@ -27,8 +41,6 @@ export default function App() {
         )
     });
 
-    const explanation = questions[currentQuestion].explanation;
-
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -38,7 +50,7 @@ export default function App() {
         } else {
             // check if it's the right answer
             const chosenAnswerText = chosenAnswer + '_correct';
-            const answeredCorrectly = questions[currentQuestion].correct_answers[chosenAnswerText];
+            const answeredCorrectly = questions[currentQuestionId].correct_answers[chosenAnswerText];
 
             // show a message based on whether it's right or wrong
             if (answeredCorrectly === 'true'){
@@ -62,57 +74,47 @@ export default function App() {
         setSelectedAnswer('');
 
         // move to the next question or show the results (if finished)
-        const nextQuestionId = currentQuestion + 1;
+        const nextQuestionId = currentQuestionId + 1;
         if (nextQuestionId >= questions.length) {
             setFinishedQuiz(true);
         } else {
-            setCurrentQuestion(currentQuestion => currentQuestion + 1);
+            setCurrentQuestionId(currentQuestionId => currentQuestionId + 1);
         }
     };
 
-    const Question = () => {
-        return (
-            <article>
-                <h2 className="font-semibold text-xl">Question #{question.id}</h2>
-
-                <legend className="text-l mt-2">{ question.question }</legend>
-                <form onSubmit={onSubmit}>
-
-                { answerInputs }
-
-                { answered 
-                    ? isCorrect
-                        ? <p className="mt-4 text-green-500">Correct!</p>
-                        : <p className="mt-4"><span className="text-red-700">Incorrect</span> - {explanation}</p>
-                    : '' }
-
-                {
-                    answered 
-                    ? <button onClick={clickNext} className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Next Question</button> 
-                    : <button type="submit" name="submit" className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Submit</button>
-                }
-                
-                </form>
-            </article>
-        );
-    };
-
-    const Results = () => {
-        const percentage = Math.round((numberCorrect / questions.length) * 100);
-        return (
-            <section className="grid h-full place-items-center">
-                <h2 className="text-lg font-bold">{ percentage > 70 ? 'Congrats!' : 'Good effort!' }</h2>
-                <p className="mt-2 mb-6">You got {numberCorrect}/{questions.length} ({percentage}%) questions correct</p>
-            </section>
-        );
-    };
-
     return (
-        <main className="grid h-full place-items-center mt-8 border-2">
-            <h1 className="font-bold text-2xl mb-4">Name of Quiz</h1>
+        <article>
+            <h2 className="font-semibold text-xl">Question #{question.id}</h2>
 
-            { finishedQuiz ? <Results /> : <Question /> }
+            <legend className="text-l mt-2">{ question.question }</legend>
+            <form onSubmit={onSubmit}>
 
-        </main>
+            { answerInputs }
+
+            { answered 
+                ? isCorrect
+                    ? <p className="mt-4 text-green-500">Correct!</p>
+                    : <p className="mt-4"><span className="text-red-700">Incorrect</span> - {question.explanation}</p>
+                : '' }
+
+            {
+                answered 
+                ? <button onClick={clickNext} className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Next Question</button> 
+                : <button type="submit" name="submit" className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Submit</button>
+            }
+            
+            </form>
+        </article>
     );
-}
+};
+
+function Results({ numberCorrect }) {
+    const percentage = Math.round((numberCorrect / questions.length) * 100);
+    
+    return (
+        <section className="grid h-full place-items-center">
+            <h2 className="text-lg font-bold">{ percentage > 70 ? 'Congrats!' : 'Good effort!' }</h2>
+            <p className="mt-2 mb-6">You got {numberCorrect}/{questions.length} ({percentage}%) questions correct</p>
+        </section>
+    );
+};
