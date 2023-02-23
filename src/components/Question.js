@@ -24,7 +24,7 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
         )
     });
 
-    const onSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         
         if (selectedAnswer === '') {
@@ -47,7 +47,7 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
         }
     };
 
-    const clickNext = (event) => {
+    const handleNextClick = (event) => {
         event.preventDefault();
 
         // set all the stylings, checked radio's, etc back to their defaults
@@ -68,7 +68,7 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
             <h2 className="font-semibold text-xl">Question #{question.id}</h2>
 
             <legend className="text-l mt-2">{ question.question }</legend>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit}>
 
             { answerInputs }
 
@@ -82,7 +82,7 @@ export default function Question({ questions, setNumberCorrect, setFinishedQuiz 
 
             {
             answered 
-                ? <button onClick={clickNext} className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Next Question</button> 
+                ? <button onClick={handleNextClick} className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Next Question</button> 
                 : <button type="submit" name="submit" className="bg-slate-300 p-2 my-6 rounded-lg font-bold">Submit</button>
             }
             
